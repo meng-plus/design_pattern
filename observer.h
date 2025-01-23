@@ -30,7 +30,7 @@ typedef struct OBSERVER_DATA_BASE
 // 观察者接口
 typedef struct Observer
 {
-    void (*update)(struct Observer *);
+    void (*update)(const struct Observer *);
     observer_data_t *data; /*!< 通知的数据 */
     mm_list_t node;
 } Observer;
