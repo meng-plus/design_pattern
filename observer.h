@@ -42,6 +42,9 @@ typedef struct Subject
     observer_data_t *data; /*!< 通知的数据 */
 } Subject;
 
+void observer_init(Observer *obs_ptr, void (*update)(const struct Observer *));
+void subject_init(Subject *sub_ptr);
+
 // 注册观察者
 void subject_register_observer(Subject *subject, Observer *observer);
 

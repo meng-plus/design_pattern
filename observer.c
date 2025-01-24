@@ -1,6 +1,25 @@
 #include <stdio.h>
 #include "observer.h"
 
+void observer_init(Observer *obs_ptr, void (*update)(const Observer *))
+{
+    if (obs_ptr)
+    {
+        obs_ptr->data   = NULL;
+        obs_ptr->update = update;
+        mm_list_init(&obs_ptr->node);
+    }
+}
+
+void subject_init(Subject *sub_ptr)
+{
+    if (sub_ptr)
+    {
+        sub_ptr->data = NULL;
+        mm_list_init(&sub_ptr->observers);
+    }
+}
+
 // 注册观察者
 void subject_register_observer(Subject *subject, Observer *observer)
 {
