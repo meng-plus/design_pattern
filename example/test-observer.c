@@ -43,25 +43,32 @@ int main()
     Observer Observer_pm2;
 
     // 注册观察者
+    printf("注册观察者\n");
     Observer_pm.update = observer_pm_update;
     subject_register_observer(&Subject_pm, &Observer_pm);
     observer_pm_data.lv = 0x12345678;
     printf("observer_pm_data.lv = 0x%x\n", observer_pm_data.lv);
     printf("&observer_pm_data= 0x%x\n", &observer_pm_data);
     // 通知观察者
+    printf("通知观察者\n");
     subject_notify_observers(&Subject_pm);
 
     // 注册观察者2
+    printf("注册观察者2\n");
     Observer_pm2.update = observer_update2;
     subject_register_observer(&Subject_pm, &Observer_pm2);
 
+    printf("通知观察者\n");
     observer_pm_data.lv = 0x5555;
     subject_notify_observers(&Subject_pm);
     // 移除观察者
+    printf("通知观察者1\n");
     subject_remove_observer(&Subject_pm, &Observer_pm);
     // 通知观察者
+    printf("通知观察者\n");
     subject_notify_observers(&Subject_pm);
     // 通知观察者
+    printf("通知观察者\n");
     subject_notify_observers(&Subject_pm);
     return 0;
 }
