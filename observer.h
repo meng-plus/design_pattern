@@ -24,7 +24,8 @@
  */
 typedef struct OBSERVER_DATA_BASE
 {
-    uint32_t type; /*!< 基类用于标识数据类型 */
+    uint16_t type; /*!< 基类用于标识数据类型 */
+    uint16_t len;  /*!< 消息长度 */
 } observer_data_t;
 
 // 观察者接口
