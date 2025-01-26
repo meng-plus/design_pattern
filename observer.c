@@ -25,6 +25,14 @@ void subject_register_observer(Subject *subject, Observer *observer)
 {
     if (observer->update)
     {
+        mm_list_t *pos;
+        mm_list_for_each(pos, &subject->observers)
+        {
+            if (pos == &observer->node)
+            {
+                return;
+            }
+        }
         mm_list_insert_after(&subject->observers, &observer->node);
     }
 }
