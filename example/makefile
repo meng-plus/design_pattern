@@ -13,7 +13,7 @@ OBJDIR = $(BUILD_DIR)/obj
 $(shell mkdir -p $(OBJDIR))
 
 # 源文件
-SRCS = $(wildcard $(SRCDIR)/*.c) $(wildcard ../*.c)
+SRCS = $(wildcard ../*.c) ./test-factory-observer.c
 
 # 目标文件
 TARGET = $(BUILD_DIR)/demo_app.out

@@ -1,6 +1,20 @@
-#include <stdio.h>
 #include "observer.h"
+#include <stdio.h>
+#include <string.h>
 
+int subject_cmp(mm_list_t *node1, mm_list_t *node2)
+{
+    Subject *sub1 = MM_LIST_ENTRY(node1, Subject, node);
+    Subject *sub2 = MM_LIST_ENTRY(node2, Subject, node);
+    return strcmp(sub1->name, sub2->name); // 根据名字来判断是否相同
+}
+
+int observer_cmp(mm_list_t *node1, mm_list_t *node2)
+{
+    Observer *obs1 = MM_LIST_ENTRY(node1, Observer, node);
+    Observer *obs2 = MM_LIST_ENTRY(node2, Observer, node);
+    return obs1 == obs2; // 根据地址来判断是否相同
+}
 void observer_init(Observer *obs_ptr, void (*update)(const Observer *))
 {
     if (obs_ptr)
@@ -15,7 +29,7 @@ void subject_init(Subject *sub_ptr)
 {
     if (sub_ptr)
     {
-        sub_ptr->data = NULL;
+        memset(sub_ptr, 0, sizeof(Subject));
         mm_list_init(&sub_ptr->observers);
     }
 }
@@ -24,16 +38,8 @@ void subject_init(Subject *sub_ptr)
 void subject_register_observer(Subject *subject, Observer *observer)
 {
     if (observer->update)
-    {
-        mm_list_t *pos;
-        mm_list_for_each(pos, &subject->observers)
-        {
-            if (pos == &observer->node)
-            {
-                return;
-            }
-        }
-        mm_list_insert_after(&subject->observers, &observer->node);
+    { /** 避免重复注册 */
+        mm_list_insert_unique(&subject->observers, &observer->node, observer_cmp);
     }
 }
 
@@ -45,25 +51,32 @@ void subject_remove_observer(Subject *subject, Observer *observer)
 
 void subject_set_data(Subject *subject, observer_data_t *data)
 { /* 遍历链表 */
-    mm_list_t *pos;
+
     subject->data = data;
-    mm_list_for_each(pos, &subject->observers)
+    OBS_ENTER_CRITICAL();
+    if (subject->data)
     {
-        Observer *curr_ptr = MM_LIST_ENTRY(pos, Observer, node);
-        curr_ptr->data     = data;
-        if (curr_ptr->update)
-        {
-            curr_ptr->update(curr_ptr);
-        }
+        memcpy(subject->data, data, data->len);
     }
+    OBS_EXIT_CRITICAL();
+}
+
+void subject_get_data(Subject *subject, void *data, uint16_t len)
+{
+    OBS_ENTER_CRITICAL();
+    if (subject->data)
+    {
+        memcpy(data, subject->data, len);
+    }
+    OBS_EXIT_CRITICAL();
 }
 
 // 通知观察者
 void subject_notify_observers(Subject *subject)
 {
     /* 遍历链表 */
-    mm_list_t *pos;
-    mm_list_for_each(pos, &subject->observers)
+    mm_list_t *pos, *n;
+    mm_list_for_each_safe(pos, n, &subject->observers)
     {
         Observer *curr_ptr = MM_LIST_ENTRY(pos, Observer, node);
         curr_ptr->data     = subject->data;
