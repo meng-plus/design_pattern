@@ -70,6 +70,7 @@ void subject_remove_observer(Subject *subject, Observer *observer);
  * @param subject
  */
 void subject_notify_observers(Subject *subject);
+void subject_notify_observers_data(Subject *subject, observer_data_t *data);
 
 /**
  * @brief 拷贝数据到主题
@@ -85,7 +86,7 @@ void subject_set_data(Subject *subject, observer_data_t *data);
  * @param data  数据
  * @param len  数据长度
  */
-void subject_get_data(Subject *subject, void *data, uint16_t len);
+uint16_t subject_get_data(Subject *subject, void *data, uint16_t len);
 
 /**
  * @brief 两者比较函数 用于查找
