@@ -32,7 +32,7 @@ enum OBSERVER_ERROR
  * @brief 数据基类
  * 使用时根据主题继承情况处理
  */
-typedef struct OBSERVER_DATA_BASE
+typedef struct OBSERVER_ARG
 {
     uint16_t type; /*!< 基类用于标识数据类型 */
     uint16_t len;  /*!< 消息长度 */
@@ -52,7 +52,6 @@ typedef struct Subject
     const char *name;      /*!< 观察者名称 */
     mm_list_t observers;   /*!< 订阅者清单 */
     observer_data_t *data; /*!< 通知的数据 */
-    mm_list_t node;        /*!< 主题节点 */
 } Subject;
 
 void observer_init(Observer *obs_ptr, void (*update)(const struct Observer *));
@@ -78,7 +77,7 @@ void subject_notify_observers_data(Subject *subject, observer_data_t *data);
  * @param subject 主题句柄
  * @param data 要发送的数据基类
  */
-void subject_set_data(Subject *subject, observer_data_t *data);
+void subject_set_data(Subject *subject, const observer_data_t *data);
 /**
  * @brief 观察者通过主题获取数据
  *
