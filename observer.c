@@ -13,7 +13,8 @@ void observer_init(Observer *obs_ptr, void (*update)(const Observer *))
 {
     if (obs_ptr)
     {
-        obs_ptr->data   = NULL;
+        memset(obs_ptr, 0, sizeof(Observer));
+        mm_list_init(&obs_ptr->node);
         obs_ptr->update = update;
     }
 }

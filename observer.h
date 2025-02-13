@@ -38,6 +38,12 @@ typedef struct OBSERVER_ARG
     uint16_t len;  /*!< 消息长度 */
 } observer_data_t;
 
+/** 类型转换 获取包含某成员的结构体指针
+ * @example OBSERVER_GET_STRUCT_PTR(base,observer_data_t,base)
+ */
+#define OBSERVER_GET_STRUCT_PTR(member_ptr, struct_type, member_name) \
+    ((struct_type *)((char *)(member_ptr) - offsetof(struct_type, member_name)))
+
 // 观察者接口
 typedef struct Observer
 {

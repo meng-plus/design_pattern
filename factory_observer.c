@@ -27,7 +27,7 @@ static factory_subject_t *find_subject_in_list(const char *name)
 
     mm_list_for_each(pos, &subject_list)
     {
-        fsub = OBSERVER_DATA_ENTRY(pos, factory_subject_t, node);
+        fsub = OBSERVER_GET_STRUCT_PTR(pos, factory_subject_t, node);
         if (strcmp(fsub->sub.name, name) == 0)
         {
             return fsub;
@@ -45,9 +45,9 @@ static factory_subject_t *create_new_subject(const char *name)
         return NULL;
     }
 
-    fsub->sub.name = name;
     subject_init(&fsub->sub);
     mm_list_init(&fsub->node);
+    fsub->sub.name = name;
     mm_list_insert_after(&subject_list, &fsub->node);
 
     return fsub;
