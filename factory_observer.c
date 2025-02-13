@@ -27,7 +27,7 @@ static factory_subject_t *find_subject_in_list(const char *name)
 
     mm_list_for_each(pos, &subject_list)
     {
-        fsub = OBSERVER_DATA_ENTRY(pos, factory_subject_t, node);
+        fsub = OBSERVER_GET_STRUCT_PTR(pos, factory_subject_t, node);
         if (strcmp(fsub->sub.name, name) == 0)
         {
             return fsub;

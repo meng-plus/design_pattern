@@ -17,13 +17,6 @@
 extern "C" {
 #endif
 
-
-/** 类型转换 获取包含某成员的结构体指针
- * @example OBSERVER_DATA_ENTRY(observer_data_ptr,observer_pm_data_t,base)
- */
-#define OBSERVER_DATA_ENTRY(ptr, type, member) \
-    ((type *)((char *)(ptr) - offsetof(type, member)))
-
 /**
  * @brief 获得主题实例，如果不存在则返回NULL
  *
