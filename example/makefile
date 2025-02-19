@@ -33,6 +33,8 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET) $(OBJDIR)/*.o
 
+test: $(TARGET)
+	./$(TARGET)
 run:
 	$(TARGET)
 
