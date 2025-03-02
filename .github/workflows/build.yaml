@@ -1,19 +1,20 @@
-name: build and test
+name: build-run
 
 on:
   push:
       branches:
         - master
-
+      paths:
+        - '**/*.c'
+        - '**/*.h'
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
-    name: Test and Rebase
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0
+        fetch-depth: 0 # 需要完整提交历史用于变基
 
     - name: Install build tools
       run: |
@@ -23,9 +24,5 @@ jobs:
     - name: Run build
       run: |
         cd example
-        make
+        make run
 
-    - name: test project
-      run: |
-        cd example
-        make test

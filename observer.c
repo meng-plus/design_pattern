@@ -62,17 +62,20 @@ void subject_set_data(Subject *subject, const observer_data_t *data)
     {
 #ifdef OBS_MALLOC
         // 如果主题数据为空，直接分配内存
-        subject->data = OBS_MALLOC(data->len);
+        subject->data = OBS_MALLOC(sizeof(observer_data_t) + data->len);
         if (subject->data == NULL)
         {
             OBS_EXIT_CRITICAL();
             return; // 内存分配失败
         }
+        memcpy(subject->data, data, sizeof(observer_data_t) + data->len);
+#else
+        subject->data = data;
 #endif
     }
     else
     {
-        memcpy(subject->data, data, data->len);
+        memcpy(subject->data, data, sizeof(observer_data_t) + data->len);
     }
 
     OBS_EXIT_CRITICAL();

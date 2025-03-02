@@ -3,20 +3,21 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 -g -fPIC
 INCLUDES = -I../ -I./
+LIBS = -lcheck -lm -lpthread -lrt -lsubunit
 
 # 目标文件路径
 BUILD_DIR = ./build
-SRCDIR = .
+SRCDIR = ../
 OBJDIR = $(BUILD_DIR)/obj
 
 # 确保目标文件夹存在
 $(shell mkdir -p $(OBJDIR))
 
 # 源文件
-SRCS = $(wildcard ../*.c) ./test-factory-observer.c
+SRCS = $(wildcard $(SRCDIR)/*.c) $(wildcard ./*.c)
 
 # 目标文件
-TARGET = $(BUILD_DIR)/demo_app.out
+TARGET = $(BUILD_DIR)/test.out
 # 生成的可执行文件
 OBJS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
 
@@ -24,18 +25,21 @@ all: $(TARGET)
 
 # 链接 demo_app 可执行文件
 $(TARGET): $(OBJS)
-	$(CC) $(OBJS) -o $@ $(LDFLAGS) $(INCLUDES)
+	$(CC) $(OBJS) -o $@ $(LDFLAGS) $(LIBS) $(INCLUDES)
 
 # 编译目标文件
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
+$(OBJDIR)/%.o: ../%.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET) $(OBJDIR)/*.o
 
-run:$(TARGET)
+test: $(TARGET)
 	$(TARGET)
 
-.PHONY: clean all run
+.PHONY: clean all test
 
 # end of Makefile
